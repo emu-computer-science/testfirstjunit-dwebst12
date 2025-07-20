@@ -7,6 +7,10 @@ public class Date implements Cloneable
     private String month;
     private int day;
     private int year; //a four digit number.
+    
+    public void addOneDay(){
+    	   System.out.println("Date.addOneDay() is not yet implemented.");
+    	}
 
     public Date( )
     {
