@@ -7,11 +7,45 @@ public class Date implements Cloneable
     private String month;
     private int day;
     private int year; //a four digit number.
-    
-    public void addOneDay(){
-    	   System.out.println("Date.addOneDay() is not yet implemented.");
-    	}
+    /////
+    public Date addOneDay() {
+        int[] daysInMonth = {
+            0,  // dummy value for index 0
+            31, // January
+            28, // February (always 28 days, no leap years)
+            31, // March
+            30, // April
+            31, // May
+            30, // June
+            31, // July
+            31, // August
+            30, // September
+            31, // October
+            30, // November
+            31  // December
+        };
 
+        int monthInt = getMonth(); // get numeric month from current String
+        int daysThisMonth = daysInMonth[monthInt];
+
+        if (day < daysThisMonth) {
+            day++;
+        } else {
+            // End of month
+            day = 1;
+            if (monthInt < 12) {
+                monthInt++;
+            } else {
+                // End of year
+                monthInt = 1;
+                year++;
+            }
+            month = monthString(monthInt); // update String month
+        }
+
+        return this;
+    }
+//////
     public Date( )
     {
         this("January", 1, 1000);  // Could have used setDate instead
@@ -73,22 +107,49 @@ public class Date implements Cloneable
             System.exit(0);
         }
     }
+////////////////////////////////////
+    public Date setDate(String monthString, int day, int year) {
+        int[] daysInMonth = {
+            0,  // index 0 placeholder
+            31, // January
+            28, // February (no leap years)
+            31, // March
+            30, // April
+            31, // May
+            30, // June
+            31, // July
+            31, // August
+            30, // September
+            31, // October
+            30, // November
+            31  // December
+        };
 
-    public void setDate(String monthString, int day, int year)
-    {
-        if (dateOK(monthString, day, year))
-        {
-            this.month = monthString;
-            this.day = day;
-            this.year = year;
+        if (!monthOK(monthString)) {
+            return null;
         }
-        else
-        {
-            System.out.println("Fatal Error in setDate(String,int, int)");
-            System.exit(0);
+
+        int monthInt = monthStringToInt(monthString);
+        if (monthInt == -1) {
+            return null;
         }
+
+        if (day < 1 || day > daysInMonth[monthInt]) {
+            return null;
+        }
+
+        if (year < 1000 || year > 9999) {
+            return null;
+        }
+
+        // All checks passed — update values
+        this.month = monthString;
+        this.day = day;
+        this.year = year;
+
+        return this;
     }
-
+/////////////////////////////////////////////
     public void setDate(int year)
     {
         setDate(1, 1, year);
@@ -235,6 +296,24 @@ public class Date implements Cloneable
                 month.equals("November") || month.equals("December") );
     }
 
+    private int monthStringToInt(String month) {
+        switch (month) {
+            case "January": return 1;
+            case "February": return 2;
+            case "March": return 3;
+            case "April": return 4;
+            case "May": return 5;
+            case "June": return 6;
+            case "July": return 7;
+            case "August": return 8;
+            case "September": return 9;
+            case "October": return 10;
+            case "November": return 11;
+            case "December": return 12;
+            default: return -1;
+        }
+    }
+    
     private String monthString(int monthNumber)
     {
         switch (monthNumber)
